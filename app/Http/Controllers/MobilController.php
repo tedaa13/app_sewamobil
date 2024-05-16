@@ -143,4 +143,23 @@ class MobilController extends Controller
     }
 
   }
+
+  public function getDataHistori(Request $r){
+    $q = "SELECT t.id
+                  , id_user
+                  , id_mobil
+                  , DATE_FORMAT(t.start_date,'%d-%m-%Y') as tanggal_pinjam
+                  , DATE_FORMAT(t.end_date,'%d-%m-%Y') as tanggal_kembali
+                  , u.name as nama_peminjam
+                  , m.nama as nama_mobil
+                  , CASE WHEN m.status = '003' THEN s.description ELSE 'Selesai' END as ket_status
+          FROM trx_transaction as t
+          INNER JOIn mst_mobil as m ON m.id = t.id_mobil
+          INNER JOIN users as u ON u.id = t.id_user
+          INNER JOIN mst_status as s ON s.id = m.status
+          WHERE t.id_mobil = '".$r->id_mobil ."'";
+
+    $data = DB::select($q);
+    return $data;
+  }
 }

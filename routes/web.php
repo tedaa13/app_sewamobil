@@ -36,6 +36,7 @@ Route::controller(MobilController::class)->group(function(){
     Route::post('mobil/getData', 'getData')->middleware('auth');
     Route::post('mobil/getDataDetail', 'getDataDetail')->middleware('auth');
     Route::post('mobil/updateData', 'updateData')->middleware('auth');
+    Route::post('mobil/getDataHistori', 'getDataHistori')->middleware('auth');
 });
 
 Route::controller(PenggunaController::class)->group(function(){

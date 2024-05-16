@@ -141,6 +141,68 @@
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  function detailIt($id_mobil){
+    $('#modal_detailCar').modal('show');
+    $.ajax({
+      type    : 'POST',
+      dataType: 'JSON',
+      url   	: "{{ url('mobil') }}/getDataHistori",
+      data    : {
+        "id_mobil" : $id_mobil,
+      },
+      headers : { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+      success : function(result){
+
+        $('#tblDetailHTML').html('');
+        $('#tblDetailHTML').append(''+
+
+        '<div class="table-responsive">'+
+          '<table class="table" style="width:100%" id="tblDetail">'+
+            '<thead>'+
+              '<tr>'+
+                '<th>No</th>'+
+                '<th>Nama</th>'+
+                '<th>Tanggal Pinjam</th>'+        
+                '<th>Dipinjam Oleh</th>'+
+                '<th>Status</th>'+
+              '</tr>'+
+            '</thead>'+
+            '<tbody>');
+
+        var i = 0;
+        $.each(result, function(x, y) {
+          i++; 
+          $('#tblDetail').append(''+
+          '<tr>'+
+            '<td>'+i+'</td>'+
+            '<td>'+y.nama_mobil+'</td>'+
+            '<td>'+y.tanggal_pinjam+' s/d '+y.tanggal_kembali+'</td>'+
+            '<td>'+y.nama_peminjam+'</td>'+
+            '<td>'+y.ket_status+'</td>'+
+          '</tr>'+
+          '');
+        
+        });
+
+        $('#table_article').append(''+
+        '</tbody></table></div>'+ 
+        '');
+
+        $('#tblDetail').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+            "autoWidth": false
+        });
+      },
+      error : function(xhr){
+
+      }
+    });
+  }
+
   function searchIt(){
     $.ajax({
       type    : 'POST',
@@ -184,7 +246,10 @@
             '<td>'+y.ket_status+'</td>'+
             '<td>'+y.created_at+'</td>'+
             '<td>'+
-              '<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Edit" onclick="editIt('+y.id+');"><i class="bi bi-pencil-square"></i></button></td>'+
+              '<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Edit" onclick="editIt('+y.id+');"><i class="bi bi-pencil-square"></i></button>'+
+              '&nbsp;'+
+              '<button type="button" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="Detail" onclick="detailIt('+y.id+');"><i class="bi bi-card-text"></i></button>'+
+            '</td>'+
           '</tr>'+
           '');
         
@@ -346,6 +411,27 @@
       </div>
         {{ csrf_field() }}
         </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal_detailCar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Histori Peminjaman Mobil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <div id="tblDetailHTML">
+            <!-- javascript -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
