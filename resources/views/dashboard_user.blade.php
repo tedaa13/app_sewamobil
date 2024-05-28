@@ -11,6 +11,11 @@
     vertical-align: middle;
   }
 
+  .textRight{
+    text-align: right;
+    vertical-align: middle;
+  }
+
   .textLeft{
     text-align: left;
     vertical-align: middle;
@@ -51,7 +56,8 @@
             data        : {
               "id_mobil"          : document.getElementById("IDMOBIL").value,
               "tanggal_pinjam"    : document.getElementById("tanggal_pinjam").value,
-              "jumlah_hari"       : document.getElementById("jumlah_hari").value
+              "jumlah_hari"       : document.getElementById("jumlah_hari").value,
+              "jumlah_km"         : document.getElementById("jumlah_km").value
             },
             headers : { "X-CSRF-TOKEN": "{{ csrf_token() }}" },
             success     : function (data) {
@@ -136,6 +142,14 @@
 
       }
     });
+  }
+
+  function isNumber(evt){
+     var charCode = (evt.which) ? evt.which : event.keyCode
+     if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+
+     return true;
   }
 
   function sewaIni($idMobil,$tipe_mobil,$nama_model,$nama_merk,$tarif,$plat){
@@ -223,6 +237,11 @@
           <div class="col-sm-3"> Jumlah Hari </div>
           <div class="col-sm-1"> : </div>
           <div class="col-sm-5"> <input type="number" class="form-control" id="jumlah_hari" value="1" min="1" max="7"> </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3"> Kilometer Awal </div>
+          <div class="col-sm-1"> : </div>
+          <div class="col-sm-5"> <input type="text" class="form-control" id="jumlah_km" onkeypress="return isNumber(event)"> </div>
         </div>
       </div>
       <div class="modal-footer">

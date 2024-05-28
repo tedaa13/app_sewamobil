@@ -19,11 +19,11 @@ class HistoriController extends Controller
                   , DATE_FORMAT(t.end_date,'%Y-%m-%d') as tanggal_kembali
                   , m.nama
                   , m.plat
-                  , CASE WHEN m.status = '003' THEN s.description ELSE 'Selesai' END as ket_status
+                  , s.description as ket_status
                   , t.total_hari as jumlah_hari
           FROM trx_transaction as t
           INNER JOIN mst_mobil as m ON m.id = t.id_mobil
-          INNER JOIN mst_status as s ON s.id = m.status
+          INNER JOIN mst_status as s ON s.id = t.status
           WHERE t.id_user = '".$this->user_id."'";
 
     $data = DB::select($q);

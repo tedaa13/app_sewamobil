@@ -54,6 +54,7 @@ Route::controller(DashboardAdminController::class)->group(function(){
     Route::get('dashboard_admin', 'index')->middleware('auth');
     Route::post('dashboard_admin/getData', 'getData')->middleware('auth');
     Route::post('dashboard_admin/addTransaction', 'addTransaction')->middleware('auth');
+    Route::post('dashboard_admin/getDataDetail', 'getDataDetail')->middleware('auth');
 });
 
 Route::controller(HistoriController::class)->group(function(){

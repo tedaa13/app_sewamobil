@@ -23,7 +23,7 @@ class DashboardUserController extends Controller
           INNER JOIN mst_model_mobil as l ON l.id = m.model
 					WHERE m.id NOT IN (SELECT t.id_mobil
 														 FROM trx_transaction as t
-														 WHERE '".$r->tanggal." 00:00:00' BETWEEN t.start_date AND t.end_date) OR m.status = '001'";
+														 WHERE '".$r->tanggal." 00:00:00' BETWEEN t.start_date AND t.end_date) AND m.status <> '003'";
 		$data = DB::select($q);
     return $data;
 	}
@@ -71,14 +71,16 @@ class DashboardUserController extends Controller
       DB::BeginTransaction();
 
       DB::table('trx_transaction')->insert([
-        'id'          => $idTrans,
-        'id_user'     => $this->user_id,
-        'id_mobil'    => $r->id_mobil,
-        'start_date'  => $r->tanggal_pinjam,
-        'end_date'    => $tanggal_kembali,
-        'total_hari'  => $r->jumlah_hari,
-        'created_at'  => Date('Y-m-d H:i:s'),
-        'updated_at'  => null
+        'id'              => $idTrans,
+        'id_user'         => $this->user_id,
+        'id_mobil'        => $r->id_mobil,
+        'kilometer_awal'  => $r->jumlah_km,
+        'start_date'      => $r->tanggal_pinjam,
+        'end_date'        => $tanggal_kembali,
+        'total_hari'      => $r->jumlah_hari,
+        'status'          => '003',
+        'created_at'      => Date('Y-m-d H:i:s'),
+        'updated_at'      => null
       ]);
 
 			DB::table('mst_mobil')
